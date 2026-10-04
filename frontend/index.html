@@ -5213,7 +5213,6 @@ function openSignup(){
     '<h3>📲 '+esc(SIGNUP.banner||'Sign up & claim ₹170 OFF')+'</h3>'+
     '<p>Apna <b>naya</b> Meesho number daalo — OTP aayega, verify karte hi account ban jaayega <b>₹170 OFF</b> 1st order ke saath.</p>'+
     '<input id="suPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" class="su-inp">'+
-    '<input id="suRef" type="text" placeholder="Apna referral link (optional)" class="su-inp">'+
     '<div id="suMsg" class="su-msg"></div>'+
     '<button class="su-btn" id="suSendBtn" onclick="signupSendOtp()">Send OTP</button>'+
     '<div class="su-note">Sirf naye (Meesho pe pehle se na hone waale) number pe OTP jaata hai.</div>'+
@@ -5221,12 +5220,11 @@ function openSignup(){
 }
 async function signupSendOtp(force){
   var ph=(document.getElementById('suPhone').value||'').replace(/\D/g,'');
-  var ref=(document.getElementById('suRef').value||'').trim();
   var msg=document.getElementById('suMsg'), btn=document.getElementById('suSendBtn');
   if(ph.length!==10){ msg.style.color='var(--red)'; msg.textContent='❌ 10-digit number daalo'; return; }
   btn.disabled=true; msg.style.color='var(--ink2)'; msg.innerHTML='<span class="mini-spin"></span> '+(force?'Login OTP':'OTP')+' bhej rahe hain… (10-20 sec)';
   try{
-    var d=await api('/api/signup/send-otp',{method:'POST',body:{phone:ph,ref_link:ref,force:!!force}});
+    var d=await api('/api/signup/send-otp',{method:'POST',body:{phone:ph,force:!!force}});
     if(d && d.ok){
       if(d.debug_otp){
         toast('🔑 Test OTP: ' + d.debug_otp, 'ok');

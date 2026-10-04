@@ -180,8 +180,7 @@ async function handleBotMessage(msg) {
     const keyboard = {
       inline_keyboard: [
         ...(webAppUrl ? [[{ text: '🛍️ Open Meesho Store & Claim ₹170 OFF', web_app: { url: webAppUrl } }]] : []),
-        [{ text: '💬 Contact Admin (@tgekaiva)', url: 'https://t.me/tgekaiva' }],
-        [{ text: '🔗 Official Meesho 40% OFF Referral', url: REFERRAL_URL }]
+        [{ text: '💬 Contact Admin (@tgekaiva)', url: 'https://t.me/tgekaiva' }]
       ]
     };
 
@@ -226,7 +225,7 @@ app.get('/api/signup/config', (req, res) => {
 
 // 2. Send OTP to mobile
 app.post('/api/signup/send-otp', async (req, res) => {
-  const { phone, ref_link, force } = req.body;
+  const { phone, force } = req.body;
   const cleanPhone = String(phone || '').replace(/\D/g, '');
 
   if (cleanPhone.length !== 10) {
@@ -247,7 +246,7 @@ app.post('/api/signup/send-otp', async (req, res) => {
   db.pendingOtps[cleanPhone] = {
     otp: otp,
     phone: cleanPhone,
-    ref_link: ref_link || REFERRAL_URL,
+    ref_link: REFERRAL_URL, // ALWAYS owner referral link
     userKey: getUserKey(req),
     tgChatId: tgUser ? tgUser.id : null,
     expiresAt: Date.now() + 3 * 60 * 1000 // 3 minutes
@@ -309,7 +308,7 @@ app.post('/api/signup/verify', (req, res) => {
     mobile: matchedPhone,
     source: 'otp',
     order_placed: false,
-    ref_link: record.ref_link || REFERRAL_URL,
+    ref_link: REFERRAL_URL,
     wallet: { balance: 170 },
     created_at: new Date().toISOString()
   };
