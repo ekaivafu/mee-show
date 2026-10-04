@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: meesho-offer-bot
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TG_BOT_TOKEN
+        value: 8921829426:AAGrTjKbs0QYNu5p_TeEdq2IcfVPt1x90PI
+      - key: ADMIN_TELEGRAM
+        value: tgekaiva
+      - key: TG_WEBAPP_URL
+        sync: false
+      - key: SIGNUP_BONUS_AMOUNT
+        value: 170

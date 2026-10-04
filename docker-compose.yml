@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: meesho-loot
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${PORT:-3000}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@db:5432/meesho_loot}
+      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      - TG_BOT_TOKEN=${TG_BOT_TOKEN:-}
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - meesho-network
+
+  db:
+    image: postgres:15-alpine
+    container_name: meesho-loot-db
+    environment:
+      POSTGRES_DB: meesho_loot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - meesho-network
+
+volumes:
+  postgres_data:
+
+networks:
+  meesho-network:
+    driver: bridge

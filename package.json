@@ -1,0 +1,31 @@
+{
+  "name": "meesho-loot-rebuild",
+  "version": "1.0.0",
+  "description": "Meesho Loot - Telegram Mini App (Rebuilt)",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js --dev",
+    "test": "node tests/smoke.test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^18.0.5",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "@tgekaiva",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ekaivafu/mee-show.git"
+  },
+  "license": "MIT"
+}
