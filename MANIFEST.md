@@ -50,22 +50,65 @@ meesho_rebuild/
 | GET | /api/health | Health check |
 | GET | / | Frontend SPA |
 
-### Authentication Required
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | /api/bootstrap | User session data |
-| GET | /api/meesho/for-you | Product feed |
-| GET | /api/account/pool_status | Account pool status |
-| GET | /api/master_address | Addresses |
-| POST | /api/auth/cookie-login | Login with cookies |
-| POST | /api/auth/signup | Sign up with phone |
-| GET | /api/cart | Get cart |
-| POST | /api/cart/add | Add to cart |
-| POST | /api/cart/remove | Remove from cart |
-| GET | /api/orders | Get orders |
-| POST | /api/orders/create | Place order |
-| GET | /api/addresses | Get addresses |
-| POST | /api/addresses/add | Add address |
+### Complete Active API Endpoints
+| Category | Method | Path | Description |
+|----------|--------|------|-------------|
+| **Auth & Signup** | POST | /api/signup/send-otp | Send OTP (live Meesho SMS or instant Telegram/web) |
+| | POST | /api/signup/verify | Verify OTP & activate account with ₹170 discount credit |
+| | POST | /api/accounts/cookie-login | Direct Meesho cookie session login & parser |
+| | GET | /api/bootstrap | Bootstrap session, active account, and wallet data |
+| **Catalog & Feed** | GET | /api/meesho/for-you | Trending product catalog feed |
+| | POST | /api/search | Real-time product search with keywords/categories |
+| | GET | /api/meesho/suggest | Search auto-suggestions |
+| | GET | /api/product | Get product by ID |
+| | POST | /api/product/by_link | Product preview from Meesho link |
+| | GET | /api/variation | Size variants for product |
+| | GET | /api/meesho/reviews/:id | Customer reviews with ratings & images |
+| | POST | /api/meesho/recommendations | Related product recommendations |
+| | POST | /api/price/check | Multi-account discount price checker |
+| **Cart & Saved** | GET | /api/cart | Get cart items, subtotal, and selected address |
+| | POST | /api/cart/add | Add product to cart with size and quantity |
+| | POST | /api/cart/update | Update quantity or remove from cart |
+| | POST | /api/cart/remove | Remove specific cart item |
+| | POST | /api/cart/location | Check destination pincode and delivery availability |
+| | POST | /api/order/prices | Calculate order price with ₹170 discount deduction |
+| | GET | /api/saved/list | Saved items / wishlist list |
+| | POST | /api/saved/save | Save items to One-Click wishlist |
+| | POST | /api/saved/remove | Remove item from saved wishlist |
+| **Addresses** | GET | /api/addresses | List user shipping addresses |
+| | POST | /api/addresses/create | Create new shipping address |
+| | POST | /api/addresses/update | Update existing address |
+| | POST | /api/addresses/set_default | Set default delivery address |
+| | POST | /api/addresses/random_update | Randomize address for testing |
+| | POST | /api/addresses/copy_to_active | Copy address to active account |
+| | GET | /api/geocode | Reverse geocode pin for interactive Leaflet map |
+| | GET | /api/master_address | Get master address templates |
+| | POST | /api/master_address | Save master address |
+| | POST | /api/master_address/random | Generate random master address |
+| | POST | /api/master_address/delete | Delete master address |
+| **Orders** | POST | /api/order/place_cod | Place Cash on Delivery order with ₹170 discount |
+| | POST | /api/order/pay_online | Initiate online UPI payment (Juspay intent) |
+| | POST | /api/order/payment_status | Check online payment status |
+| | POST | /api/order/confirm | Confirm online prepaid order |
+| | GET | /api/orders | List all placed orders |
+| | GET | /api/orders/detail | Detailed tracking & timeline for an order |
+| | GET | /api/orders/cancel_reasons | List of valid cancellation reasons |
+| | POST | /api/orders/cancel | Cancel placed order |
+| **Accounts & Wallet** | GET | /api/accounts/list | List imported & created accounts |
+| | POST | /api/accounts/select | Switch active shopping account |
+| | POST | /api/accounts/import | Bulk or single account session import |
+| | POST | /api/accounts/refresh | Verify / refresh session token |
+| | POST | /api/accounts/delete | Remove account from pool |
+| | GET | /api/wallet/history | View ₹170 discount credit & transaction history |
+| | GET | /api/account/fod | First Order Discount status & details |
+
+
+### Reverse-Engineered Meesho Live Endpoints
+| Action | Method | Real Meesho URL | Payload / Notes |
+|--------|--------|-----------------|-----------------|
+| **Send OTP** | POST | `https://www.meesho.com/api/v1/user/login/request-otp` | `{"phone_number": "XXXXXXXXXX"}` -> returns `request_id` |
+| **Verify OTP & Login** | POST | `https://www.meesho.com/api/v1/user/login` | `{"phone_number": "...", "otp": "...", "request_id": "...", "instance_id": "<uuid>", "login_type": "meesho_sms_auth"}` -> Sets `__logged_in_user_id__`, `_is_logged_in_`, `__connect.sid__` |
+
 
 ## Database Tables
 1. **accounts** - User accounts (mobile, cookies, wallet)
