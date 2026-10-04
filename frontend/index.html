@@ -1,809 +1,624 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh;">
+<html lang="en" style="--tg-viewport-height:100vh;--tg-viewport-stable-height:100vh;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#0E0F13">
-    
-    <title>Meesho Loot</title>
-    
+    <meta name="theme-color" content="#DB2777">
+    <meta name="description" content="Get 40% OFF on your first Meesho order. Use our exclusive referral link and save up to ₹100 instantly!">
+    <title>Meesho Offer — 40% OFF First Order</title>
+
     <!-- Telegram Web App SDK -->
     <script src="/assets/telegram-web-app.js"></script>
-    
-    <!-- Leaflet for Maps -->
-    <link rel="stylesheet" href="/assets/leaflet.css" media="all" onload="this.media='all'">
-    <script defer src="/assets/leaflet.js"></script>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap">
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap">
+
     <style>
-        /* ══════════════════════════════════════════════════
-           MEESHO MINI — Pink Candy design language
-           flat · clean · modern · springy
-           ══════════════════════════════════════════════════ */
-        :root{
-            --pink:#DB2777;
-            --grape:#9333EA;
-            --coral:#22B8A6;
-            --candy:linear-gradient(135deg,#DB2777 0%,#E11D48 50%,#9333EA 120%);
-            --candy-soft:linear-gradient(135deg,rgba(219,39,119,.08),rgba(225,29,72,.06) 50%,rgba(147,51,234,.08));
-            --bg:#F8F8FB;
-            --bg-glow:none;
-            --surface:#FFFFFF;
-            --surface2:#F3F4F8;
-            --glass:rgba(255,255,255,.88);
-            --ink:#111827;
-            --ink2:#4B5563;
-            --ink3:#9CA3AF;
-            --line:#E5E7EB;
-            --mint:#059669;
-            --mint-bg:#D1FAE5;
-            --sun:#D97706;
-            --sun-bg:#FEF3C7;
-            --sky:#2563EB;
-            --sky-bg:#DBEAFE;
-            --berry:#DC2626;
-            --berry-bg:#FEE2E2;
-            --puff:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
-            --puff-lg:0 4px 16px rgba(0,0,0,.08),0 12px 40px rgba(0,0,0,.06);
-            --glow:0 4px 14px rgba(219,39,119,.30),0 1px 4px rgba(219,39,119,.18);
+        :root {
+            --pink: #DB2777;
+            --pink-dark: #be185d;
+            --pink-light: #fbcfe8;
+            --grape: #9333EA;
+            --candy: linear-gradient(135deg, #DB2777 0%, #E11D48 45%, #9333EA 100%);
+            --candy-soft: linear-gradient(135deg, rgba(219,39,119,.09), rgba(147,51,234,.07));
+            --bg: #F9F5FF;
+            --surface: #FFFFFF;
+            --surface2: #F3F4F8;
+            --ink: #111827;
+            --ink2: #4B5563;
+            --ink3: #9CA3AF;
+            --line: #E5E7EB;
+            --mint: #059669;
+            --mint-bg: #D1FAE5;
+            --puff: 0 2px 8px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.05);
+            --puff-lg: 0 8px 32px rgba(219,39,119,.18), 0 2px 8px rgba(0,0,0,.08);
+            --glow: 0 4px 20px rgba(219,39,119,.35), 0 1px 4px rgba(219,39,119,.2);
+            --radius: 18px;
         }
-        
-        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-        html,body{height:100%;overflow-x:hidden;width:100%;max-width:100vw;margin:0}
-        
-        body{
-            background:var(--bg);
-            background-image:var(--bg-glow);
-            background-attachment:fixed;
-            color:var(--ink);
-            font-family:"SF Pro Rounded",ui-rounded,"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
-            font-size:15px;line-height:1.5;letter-spacing:-.005em;
-            overscroll-behavior-y:none;-webkit-font-smoothing:antialiased;
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            width: 100%;
+            background: var(--bg);
         }
-        
-        button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer;letter-spacing:inherit}
-        input{font-family:inherit}
-        img{display:block}
-        .hidden{display:none!important}
-        
-        /* Animations */
-        @keyframes floatIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-        @keyframes pop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
-        @keyframes jellyTap{0%{transform:scale(1)}50%{transform:scale(.95)}100%{transform:scale(1)}}
-        @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        
-        /* Top Bar */
-        .topbar{
-            position:sticky;top:0;z-index:40;
-            display:flex;align-items:center;gap:10px;
-            padding:10px 16px;
-            padding-top:calc(10px + env(safe-area-inset-top));
-            background:var(--surface);
-            border-bottom:1px solid var(--line);
-            box-shadow:0 1px 4px rgba(0,0,0,.04);
+
+        body {
+            font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+            font-size: 15px;
+            line-height: 1.55;
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+            overscroll-behavior-y: none;
         }
-        
-        .brand-mark{
-            width:38px;height:38px;border-radius:12px;
-            background:var(--candy);
-            display:flex;align-items:center;justify-content:center;
-            color:#fff;font-weight:900;font-size:19px;flex:0 0 auto;
-            box-shadow:var(--glow);
+
+        /* ── Animations ── */
+        @keyframes fadeUp   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+        @keyframes pop      { 0% { transform:scale(.85); opacity:0; } 100% { transform:scale(1); opacity:1; } }
+        @keyframes shimmer  { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
+        @keyframes pulse    { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04); } }
+        @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+        @keyframes spin     { to { transform:rotate(360deg); } }
+        @keyframes confetti { 0% { transform:translateY(0) rotate(0); opacity:1; } 100% { transform:translateY(-80px) rotate(720deg); opacity:0; } }
+
+        /* ── Page wrapper ── */
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            animation: fadeUp .45s ease both;
         }
-        
-        .acct-pill{
-            display:flex;align-items:center;gap:6px;
-            background:var(--surface2);
-            border:1.5px solid var(--line);
-            border-radius:10px;
-            padding:8px 14px;
-            font-weight:700;font-size:13px;color:var(--ink);
-            min-width:0;flex:1 1 auto;
+
+        /* ── Hero ── */
+        .hero {
+            background: var(--candy);
+            padding: 32px 20px 48px;
+            padding-top: calc(32px + env(safe-area-inset-top));
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .wallet-chip{
-            display:flex;align-items:center;gap:4px;
-            background:var(--pink);color:#fff;
-            border-radius:10px;padding:8px 14px;
-            font-weight:800;font-size:12.5px;flex:0 0 auto;white-space:nowrap;
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
         }
-        
-        /* Layout */
-        .view{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
-        .page-pad{padding:16px 14px}
-        
-        .page-title{
-            font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:14px;
-            color:var(--ink);
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,.2);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 100px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,.3);
         }
-        
-        /* Bottom Nav */
-        .tabbar{
-            position:fixed;left:0;right:0;bottom:0;z-index:40;
-            display:flex;
-            background:var(--surface);
-            border-top:1px solid var(--line);
-            box-shadow:0 -1px 8px rgba(0,0,0,.04);
-            padding:4px 0 calc(4px + env(safe-area-inset-bottom));
+
+        .hero-emoji {
+            font-size: 64px;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+            display: block;
         }
-        
-        .tabbar button{
-            flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
-            padding:8px 0 6px;
-            color:var(--ink3);
-            font-size:10px;font-weight:700;letter-spacing:.02em;
-            position:relative;z-index:1;
-            transition:color .2s ease;
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.15;
+            margin-bottom: 10px;
+            letter-spacing: -.02em;
         }
-        
-        .tabbar button .ico{font-size:20px;line-height:1}
-        .tabbar button.active{color:var(--pink)}
-        .tabbar button.active .ico{transform:scale(1.1)}
-        
-        /* Cards */
-        .card{
-            background:var(--surface);
-            border:1.5px solid var(--line);
-            border-radius:16px;
-            padding:16px;
-            margin-bottom:12px;
-            box-shadow:var(--puff);
+
+        .hero-title span {
+            display: block;
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: -.03em;
         }
-        
-        /* Product Grid */
-        .product-grid{
-            display:grid;
-            grid-template-columns:repeat(2, 1fr);
-            gap:12px;
+
+        .hero-sub {
+            color: rgba(255,255,255,.85);
+            font-size: 15px;
+            font-weight: 500;
         }
-        
-        .product-card{
-            background:var(--surface);
-            border:1.5px solid var(--line);
-            border-radius:16px;
-            overflow:hidden;
-            transition:transform .2s ease;
+
+        /* ── Content card ── */
+        .content {
+            flex: 1;
+            padding: 0 16px;
+            margin-top: -20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
-        
-        .product-card:active{transform:scale(.97)}
-        
-        .product-img{
-            width:100%;aspect-ratio:1;
-            object-fit:cover;
-            background:var(--surface2);
+
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--puff);
+            padding: 18px 16px;
+            animation: fadeUp .5s ease both;
         }
-        
-        .product-info{padding:10px}
-        .product-name{font-size:13px;font-weight:600;line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-        .product-price{display:flex;align-items:baseline;gap:6px}
-        .price-current{font-size:15px;font-weight:800;color:var(--pink)}
-        .price-original{font-size:12px;color:var(--ink3);text-decoration:line-through}
-        .discount-badge{background:var(--pink);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
-        
-        /* Buttons */
-        .btn{
-            display:inline-flex;align-items:center;justify-content:center;gap:8px;
-            padding:14px 24px;border-radius:12px;
-            font-weight:700;font-size:14px;
-            transition:all .15s ease;
+
+        /* ── Offer card ── */
+        .offer-card {
+            border: 2px solid var(--pink-light);
+            background: linear-gradient(135deg, #fff 0%, #fdf2f8 100%);
         }
-        
-        .btn:active{transform:scale(.96)}
-        
-        .btn-primary{
-            background:var(--candy);
-            color:#fff;
-            box-shadow:var(--glow);
+
+        .offer-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
         }
-        
-        .btn-secondary{
-            background:var(--surface2);
-            border:1.5px solid var(--line);
-            color:var(--ink);
+
+        .offer-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: var(--candy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            box-shadow: var(--glow);
         }
-        
-        .btn-block{width:100%}
-        
-        /* Form Elements */
-        .input-group{
-            margin-bottom:16px;
+
+        .offer-details h2 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--pink);
         }
-        
-        .input-label{
-            display:block;font-size:13px;font-weight:600;
-            color:var(--ink2);margin-bottom:6px;
+
+        .offer-details p {
+            font-size: 13px;
+            color: var(--ink2);
+            margin-top: 2px;
         }
-        
-        .input-field{
-            width:100%;padding:14px 16px;
-            background:var(--surface2);
-            border:1.5px solid var(--line);
-            border-radius:12px;
-            font-size:15px;font-weight:500;
-            color:var(--ink);
-            transition:border-color .2s ease,box-shadow .2s ease;
+
+        /* ── Benefits row ── */
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            animation-delay: .05s;
         }
-        
-        .input-field:focus{
-            outline:none;
-            border-color:var(--pink);
-            box-shadow:0 0 0 3px rgba(219,39,119,.1);
+
+        .benefit {
+            background: var(--surface);
+            border-radius: 14px;
+            box-shadow: var(--puff);
+            padding: 14px 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
-        
-        .textarea-field{
-            min-height:120px;
-            resize:vertical;
+
+        .benefit-icon {
+            font-size: 26px;
+            animation: float 3s ease-in-out infinite;
         }
-        
-        /* Toast */
-        .toast-container{
-            position:fixed;top:20px;left:50%;transform:translateX(-50%);
-            z-index:9999;
-            pointer-events:none;
+
+        .benefit:nth-child(2) .benefit-icon { animation-delay: .3s; }
+        .benefit:nth-child(3) .benefit-icon { animation-delay: .6s; }
+
+        .benefit-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ink2);
+            text-align: center;
+            line-height: 1.3;
         }
-        
-        .toast{
-            background:var(--ink);
-            color:#fff;
-            padding:12px 24px;
-            border-radius:12px;
-            font-size:14px;font-weight:600;
-            animation:floatIn .3s ease;
-            margin-bottom:8px;
-            box-shadow:var(--puff-lg);
+
+        /* ── Steps ── */
+        .steps-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            color: var(--ink);
         }
-        
-        .toast.success{background:var(--mint)}
-        .toast.error{background:var(--berry)}
-        
-        /* Modal */
-        .modal-overlay{
-            position:fixed;inset:0;
-            background:rgba(0,0,0,.5);
-            z-index:100;
-            display:flex;align-items:flex-end;justify-content:center;
-            opacity:0;pointer-events:none;
-            transition:opacity .25s ease;
+
+        .step {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            margin-bottom: 14px;
         }
-        
-        .modal-overlay.show{opacity:1;pointer-events:auto}
-        
-        .modal-content{
-            background:var(--surface);
-            border-radius:20px 20px 0 0;
-            width:100%;max-width:500px;
-            max-height:80vh;
-            overflow-y:auto;
-            padding:20px;
-            transform:translateY(100%);
-            transition:transform .3s var(--spring);
+
+        .step:last-child { margin-bottom: 0; }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--candy);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(219,39,119,.3);
         }
-        
-        .modal-overlay.show .modal-content{transform:translateY(0)}
-        
-        /* Skeleton Loading */
-        .skeleton{
-            background:linear-gradient(90deg,var(--sk1) 25%,var(--sk2) 50%,var(--sk1) 75%);
-            background-size:200% 100%;
-            animation:shimmer 1.5s infinite;
-            border-radius:8px;
+
+        .step-body { flex: 1; }
+
+        .step-body strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 2px;
         }
-        
-        :root{
-            --sk1:#E5E7EB;
-            --sk2:#F3F4F6;
+
+        .step-body span {
+            font-size: 13px;
+            color: var(--ink2);
         }
-        
-        /* Empty State */
-        .empty-state{
-            text-align:center;padding:40px 20px;
-            color:var(--ink3);
+
+        .step-divider {
+            width: 2px;
+            height: 14px;
+            background: var(--line);
+            margin: 0 15px;
         }
-        
-        .empty-icon{font-size:64px;margin-bottom:16px}
-        .empty-title{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px}
-        .empty-desc{font-size:14px;line-height:1.5}
-        
-        /* Badge */
-        .badge{
-            position:absolute;top:-6px;right:-11px;
-            min-width:18px;height:18px;padding:0 4px;
-            background:var(--pink);color:#fff;
-            border-radius:999px;font-size:10px;font-weight:900;
-            display:flex;align-items:center;justify-content:center;
-            border:2px solid var(--surface);
+
+        /* ── CTA Button ── */
+        .cta-wrap {
+            padding: 0 16px;
+            position: sticky;
+            bottom: calc(12px + env(safe-area-inset-bottom));
+            z-index: 20;
+            animation: fadeUp .6s ease both;
+            animation-delay: .2s;
         }
-        
-        /* Utility Classes */
-        .text-center{text-align:center}
-        .text-pink{color:var(--pink)}
-        .text-mint{color:var(--mint)}
-        .text-berry{color:var(--berry)}
-        .mt-1{margin-top:.5rem}
-        .mt-2{margin-top:1rem}
-        .mb-1{margin-bottom:.5rem}
-        .mb-2{margin-bottom:1rem}
-        .flex{display:flex}
-        .items-center{align-items:center}
-        .justify-between{justify-content:space-between}
-        .gap-1{gap:.5rem}
-        .gap-2{gap:1rem}
-        .w-full{width:100%}
-        .font-bold{font-weight:700}
-        .text-sm{font-size:13px}
-        .text-xs{font-size:11px}
+
+        .btn-cta {
+            width: 100%;
+            padding: 17px 24px;
+            background: var(--candy);
+            color: #fff;
+            font-family: inherit;
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: -.01em;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: var(--puff-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: pulse 2.5s ease-in-out infinite;
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .btn-cta:active {
+            transform: scale(.97);
+            box-shadow: 0 2px 8px rgba(219,39,119,.25);
+            animation: none;
+        }
+
+        .btn-cta .arrow {
+            font-size: 20px;
+            transition: transform .2s;
+        }
+
+        .btn-cta:active .arrow { transform: translateX(4px); }
+
+        /* ── Link box ── */
+        .link-box {
+            background: var(--surface2);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1.5px solid var(--line);
+            margin-top: 12px;
+        }
+
+        .link-url {
+            flex: 1;
+            font-size: 12px;
+            color: var(--ink2);
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .copy-btn {
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--pink);
+            background: var(--pink-light);
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background .15s;
+        }
+
+        .copy-btn:active { background: var(--pink); color: #fff; }
+
+        /* ── Toast ── */
+        .toast-container {
+            position: fixed;
+            top: calc(12px + env(safe-area-inset-top));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+            width: calc(100% - 32px);
+            max-width: 360px;
+        }
+
+        .toast {
+            background: var(--ink);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,.2);
+            animation: pop .25s ease both;
+            text-align: center;
+        }
+
+        .toast.success { background: var(--mint); }
+        .toast.err { background: #DC2626; }
+
+        /* ── Support footer ── */
+        .support-footer {
+            text-align: center;
+            padding: 10px 16px 4px;
+            font-size: 12px;
+            color: var(--ink3);
+        }
+
+        .support-footer a {
+            color: var(--pink);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* ── Copied checkmark ── */
+        .copied-icon { display: none; }
+        .copied .copy-text { display: none; }
+        .copied .copied-icon { display: inline; }
+
+        /* ── Confetti bits ── */
+        .confetti-bit {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            animation: confetti 1s ease-out both;
+            z-index: 9999;
+        }
     </style>
 </head>
 <body>
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
-    
-    <!-- Top Bar -->
-    <header class="topbar" id="topbar">
-        <div class="brand-mark">M</div>
-        <button class="acct-pill" onclick="switchTab('account')">
-            <span class="num" id="accountLabel">📱 No account</span>
-            <span class="caret">▾</span>
-        </button>
-        <button class="wallet-chip" id="walletChip" onclick="switchTab('account')">
-            💰 ₹<span id="walletBalance">0</span>
-        </button>
-    </header>
-    
-    <!-- Main Content -->
-    <main class="view" id="mainView">
-        <!-- Account View (Default) -->
-        <section class="page-pad" id="view-account">
-            <h2 class="page-title">Import a Meesho Account</h2>
-            
-            <div class="card">
-                <button class="btn btn-primary btn-block mb-2" onclick="showSignupModal()">
-                    📲 Sign up with number & claim ₹170 OFF
-                </button>
-                
-                <button class="btn btn-secondary btn-block mb-2" onclick="showBuyAccountModal()">
-                    🛒 Buy ready account + free order @ ₹40
-                    <small style="color:var(--ink3)">(0 stock)</small>
-                </button>
-                
-                <div class="input-group mt-2">
-                    <label class="input-label">🔑 Login with Cookies</label>
-                    <textarea class="input-field textarea-field" id="cookieInput" 
-                        placeholder="Paste cookies here...&#10;Format 1 (cookies): xo=eyJ...; ox=nZT...&#10;Format 2 (JSON): {&quot;xo&quot;:&quot;...&quot;,&quot;ox&quot;:&quot;...&quot;}&#10;Format 3 (accounts.txt line): {&quot;mobile&quot;:&quot;...&quot;,...}"></textarea>
-                    <button class="btn btn-primary btn-block mt-1" onclick="loginWithCookies()">
-                        🔑 Login with Cookies
+
+    <div class="page">
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-badge">🏷️ Exclusive Offer</div>
+            <span class="hero-emoji">🛍️</span>
+            <h1 class="hero-title">
+                Get <span>40% OFF</span>
+            </h1>
+            <p class="hero-sub">on your very first Meesho order — up to <strong>₹100</strong> savings!</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+
+            <!-- Offer details -->
+            <div class="card offer-card" style="animation-delay:.05s">
+                <div class="offer-row">
+                    <div class="offer-icon">🎁</div>
+                    <div class="offer-details">
+                        <h2>₹100 OFF Coupon</h2>
+                        <p>40% discount applied automatically on checkout for new users</p>
+                    </div>
+                </div>
+                <div class="link-box">
+                    <span class="link-url" id="refLinkText">app.meesho.com/2yoV/r99th0qd</span>
+                    <button class="copy-btn" id="copyBtn" onclick="copyLink()">
+                        <span class="copy-text">Copy</span>
+                        <span class="copied-icon">✅</span>
                     </button>
                 </div>
-                
-                <button class="btn btn-secondary btn-block mt-2" onclick="showBulkImportModal()">
-                    📥 Bulk Import (multiple accounts)
-                </button>
+            </div>
 
-                <div class="card mt-2" style="background:var(--candy-soft);border:1px solid rgba(219,39,119,0.25);text-align:center;padding:14px;border-radius:14px;">
-                    <div style="font-weight:800;font-size:14px;color:var(--pink)">⚡ Meesho Offer Bot</div>
-                    <div style="font-size:12px;color:var(--ink2);margin:4px 0 8px;">Developer & Admin: <strong>@tgekaiva</strong></div>
-                    <a href="https://t.me/tgekaiva" target="_blank" class="btn btn-secondary btn-block" style="text-decoration:none;display:block;text-align:center;font-weight:600;font-size:13px;padding:8px 12px;">
-                        💬 Contact @tgekaiva on Telegram
-                    </a>
+            <!-- Benefits -->
+            <div class="benefits">
+                <div class="benefit" style="animation-delay:.07s">
+                    <span class="benefit-icon">🏠</span>
+                    <span class="benefit-label">Home Delivery</span>
+                </div>
+                <div class="benefit" style="animation-delay:.1s">
+                    <span class="benefit-icon">💵</span>
+                    <span class="benefit-label">Cash on Delivery</span>
+                </div>
+                <div class="benefit" style="animation-delay:.13s">
+                    <span class="benefit-icon">🔄</span>
+                    <span class="benefit-label">Easy Returns</span>
                 </div>
             </div>
-        </section>
-        
-        <!-- Shop View -->
-        <section class="page-pad hidden" id="view-shop">
-            <h2 class="page-title">🛍️ Shop</h2>
-            
-            <!-- Search -->
-            <div class="search-row">
-                <div class="search-box">
-                    <span class="mag">🔍</span>
-                    <input type="text" placeholder="Search products..." id="searchInput" onkeyup="handleSearch(event)">
+
+            <!-- How to claim -->
+            <div class="card" style="animation-delay:.1s">
+                <div class="steps-title">📋 How to claim your discount</div>
+
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-body">
+                        <strong>Tap "Claim Discount" below</strong>
+                        <span>Opens the Meesho app or Play Store / App Store</span>
+                    </div>
                 </div>
-                <button class="search-btn" onclick="searchProducts()">Search</button>
-            </div>
-            
-            <!-- Products Grid -->
-            <div class="product-grid" id="productGrid">
-                <!-- Products loaded dynamically -->
-            </div>
-        </section>
-        
-        <!-- Cart View -->
-        <section class="page-pad hidden" id="view-cart">
-            <h2 class="page-title">🛒 Cart</h2>
-            <div id="cartItems"></div>
-            <div class="card mt-2" id="cartSummary" style="display:none">
-                <div class="flex justify-between mb-1">
-                    <span>Total:</span>
-                    <span class="price-current" id="cartTotal">₹0</span>
+                <div class="step-divider" style="margin-left:15px"></div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-body">
+                        <strong>Sign up with your phone number</strong>
+                        <span>Create a new Meesho account (first time users only)</span>
+                    </div>
                 </div>
-                <button class="btn btn-primary btn-block mt-2" onclick="checkout()">Place Order</button>
+                <div class="step-divider" style="margin-left:15px"></div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-body">
+                        <strong>Place your first order</strong>
+                        <span>40% OFF (up to ₹100) is applied automatically at checkout! 🎉</span>
+                    </div>
+                </div>
             </div>
-        </section>
-        
-        <!-- Orders View -->
-        <section class="page-pad hidden" id="view-orders">
-            <h2 class="page-title">📦 Orders</h2>
-            <div id="ordersList"></div>
-        </section>
-        
-        <!-- Address View -->
-        <section class="page-pad hidden" id="view-address">
-            <h2 class="page-title">📍 Address</h2>
-            <div id="addressList"></div>
-            <button class="btn btn-primary btn-block mt-2" onclick="showAddAddressModal()">+ Add New Address</button>
-        </section>
-    </main>
-    
-    <!-- Bottom Navigation -->
-    <nav class="tabbar">
-        <div class="nav-blob" id="navBlob"></div>
-        <button class="active" data-tab="shop" onclick="switchTab('shop')">
-            <span class="ico">🛍️</span>
-            <span>Shop</span>
-        </button>
-        <button data-tab="cart" onclick="switchTab('cart')">
-            <span class="ico">🛒</span>
-            <span>Cart</span>
-            <span class="badge hidden" id="cartBadge">0</span>
-        </button>
-        <button data-tab="orders" onclick="switchTab('orders')">
-            <span class="ico">📦</span>
-            <span>Orders</span>
-        </button>
-        <button data-tab="address" onclick="switchTab('address')">
-            <span class="ico">📍</span>
-            <span>Address</span>
-        </button>
-        <button data-tab="account" onclick="switchTab('account')">
-            <span class="ico">👤</span>
-            <span>Account</span>
-        </button>
-    </nav>
-    
-    <!-- Signup Modal -->
-    <div class="modal-overlay" id="signupModal">
-        <div class="modal-content">
-            <h3 style="margin-bottom:16px">🎉 Sign Up & Get ₹170 OFF</h3>
-            <div class="input-group">
-                <label class="input-label">Mobile Number</label>
-                <input type="tel" class="input-field" id="signupMobile" placeholder="Enter 10-digit mobile number">
+
+            <!-- Note -->
+            <div class="card" style="background:var(--mint-bg);border:1px solid #6ee7b7;padding:14px 16px;animation-delay:.15s">
+                <p style="font-size:13px;color:#065f46;font-weight:600;">
+                    ⚡ <strong>Only for new users!</strong> If you already have a Meesho account, this offer won't apply. Create a fresh account to claim.
+                </p>
             </div>
-            <div class="input-group">
-                <label class="input-label">Name (Optional)</label>
-                <input type="text" class="input-field" id="signupName" placeholder="Your name">
-            </div>
-            <button class="btn btn-primary btn-block" onclick="signup()">Sign Up & Claim Offer</button>
-            <button class="btn btn-secondary btn-block mt-1" onclick="closeModal('signupModal')">Cancel</button>
+
+        </div>
+
+        <!-- Sticky CTA -->
+        <div style="height:16px"></div>
+        <div class="cta-wrap">
+            <button class="btn-cta" id="ctaBtn" onclick="claimDiscount()">
+                🎉 Claim My Discount
+                <span class="arrow">→</span>
+            </button>
+        </div>
+
+        <!-- Support -->
+        <div class="support-footer">
+            Questions? <a href="https://t.me/tgekaiva" target="_blank">Contact @tgekaiva</a>
         </div>
     </div>
 
     <script>
-        /* ================= Telegram Setup ================= */
-        const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-        try { if(tg) { tg.ready(); tg.expand(); } } catch(e){}
-        
-        function applyTheme(){
-            document.documentElement.dataset.theme = 'light';
-            try {
-                if(tg && tg.setHeaderColor) tg.setHeaderColor('#FFFFFF');
-                if(tg && tg.setBackgroundColor) tg.setBackgroundColor('#F2F4FA');
-            } catch(e){}
-        }
-        applyTheme();
-        
-        function haptic(type){
-            try {
-                const h = tg && tg.HapticFeedback;
-                if(!h) return;
-                if(type==='ok') h.notificationOccurred('success');
-                else if(type==='err') h.notificationOccurred('error');
-                else h.impactOccurred(type||'light');
-            } catch(e){}
-        }
-        
-        /* ================= Auth + API ================= */
-        const AUTH = Object.fromEntries(new URLSearchParams(location.search));
-        let currentToken = null;
-        let currentUser = null;
-        
-        async function api(path, opts={}){
-            const u = new URL(path, location.origin);
-            u.search = new URLSearchParams({ ...AUTH, ...(opts.q||{}) });
-            const headers = {
-                'Content-Type': 'application/json',
-                'X-Tg-Init-Data': (tg&&tg.initData)||AUTH.tgib||''
-            };
-            if(currentToken) headers['Authorization'] = `Bearer ${currentToken}`;
-            
-            const resp = await fetch(u, {
-                method: opts.method||'GET',
-                headers,
-                body: opts.body?JSON.stringify(opts.body):undefined
-            });
-            const d = await resp.json();
-            if(d&&d.error==='no_account'){
-                toast('Import a Meesho account first','err');
-                if(S.tab!=='account') switchTab('account');
+        /* ── Telegram setup ── */
+        const tg = window.Telegram?.WebApp || null;
+        try {
+            if (tg) {
+                tg.ready();
+                tg.expand();
+                tg.setHeaderColor?.('#DB2777');
+                tg.setBackgroundColor?.('#F9F5FF');
             }
-            return d;
-        }
-        
-        /* ================= State ================= */
-        const S = {
-            tab: 'account',
-            products: [],
-            cart: {},
-            orders: [],
-            addresses: []
-        };
-        
-        /* ================= Toast ================= */
-        function toast(msg,type='info'){
-            const c=document.getElementById('toastContainer');
-            const t=document.createElement('div');
-            t.className=`toast ${type}`;
-            t.textContent=msg;
+        } catch(e) {}
+
+        /* ── Config ── */
+        const REFERRAL_URL  = 'https://app.meesho.com/2yoV/r99th0qd?via=9xrkok&from=account_section';
+        const SUPPORT_URL   = 'https://t.me/tgekaiva';
+
+        /* ── Toast ── */
+        function toast(msg, type = 'info') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            t.textContent = msg;
             c.appendChild(t);
-            setTimeout(()=>t.remove(),3000);
+            setTimeout(() => t.remove(), 3000);
         }
-        
-        /* ================= Navigation ================= */
-        function switchTab(tab){
+
+        /* ── Haptic ── */
+        function haptic(type = 'light') {
+            try {
+                const h = tg?.HapticFeedback;
+                if (!h) return;
+                if (type === 'success') h.notificationOccurred('success');
+                else if (type === 'err') h.notificationOccurred('error');
+                else h.impactOccurred(type);
+            } catch(e) {}
+        }
+
+        /* ── Confetti burst ── */
+        function confetti() {
+            const emojis = ['🎉','✨','🎁','💥','🌟','🛍️','💰'];
+            for (let i = 0; i < 8; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-bit';
+                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.left = (20 + Math.random() * 60) + 'vw';
+                el.style.top  = (40 + Math.random() * 30) + 'vh';
+                el.style.animationDelay = (Math.random() * 0.3) + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1200);
+            }
+        }
+
+        /* ── Copy link ── */
+        function copyLink() {
             haptic('light');
-            S.tab=tab;
-            
-            // Hide all views
-            document.querySelectorAll('.view section').forEach(s=>s.classList.add('hidden'));
-            
-            // Show selected view
-            document.getElementById(`view-${tab}`).classList.remove('hidden');
-            
-            // Update nav
-            document.querySelectorAll('.tabbar button').forEach(b=>{
-                b.classList.toggle('active',b.dataset.tab===tab);
-            });
-            
-            // Move blob
-            const activeBtn=document.querySelector(`.tabbar button[data-tab="${tab}"]`);
-            if(activeBtn){
-                const blob=document.getElementById('navBlob');
-                blob.style.left=activeBtn.offsetLeft+'px';
-                blob.style.width=activeBtn.offsetWidth+'px';
-            }
-            
-            // Load tab data
-            if(tab==='shop'&&S.products.length===0) loadProducts();
-            else if(tab==='cart') loadCart();
-            else if(tab==='orders') loadOrders();
-            else if(tab==='address') loadAddresses();
+            navigator.clipboard?.writeText(REFERRAL_URL).catch(() => {});
+            const btn = document.getElementById('copyBtn');
+            btn.classList.add('copied');
+            toast('Link copied! Share with friends 🔗', 'success');
+            setTimeout(() => btn.classList.remove('copied'), 2500);
         }
-        
-        /* ================= Products ================= */
-        async function loadProducts(){
-            const grid=document.getElementById('productGrid');
-            grid.innerHTML='<div class="skeleton" style="height:400px"></div>';
-            
-            const d=await api('/api/meesho/for-you',{q:{limit:20}});
-            if(d.ok){
-                S.products=d.products||[];
-                renderProducts();
-            }else{
-                grid.innerHTML='<div class="empty-state"><div class="empty-icon">😢</div><div class="empty-title">Failed to load</div><div class="empty-desc">'+(d.error||'Unknown error')+'</div></div>';
-            }
-        }
-        
-        function renderProducts(){
-            const grid=document.getElementById('productGrid');
-            if(!S.products.length){
-                grid.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No products found</div></div>';
-                return;
-            }
-            grid.innerHTML=S.products.map(p=>`
-                <div class="product-card" onclick="addToCart('${p.id}')">
-                    <img src="${p.image}" alt="${p.name}" class="product-img" loading="lazy">
-                    <div class="product-info">
-                        <div class="product-name">${p.name}</div>
-                        <div class="product-price">
-                            <span class="price-current">₹${p.finalPrice}</span>
-                            <span class="price-original">₹${p.price}</span>
-                            <span class="discount-badge">${p.discount}% OFF</span>
-                        </div>
-                        <div style="font-size:11px;color:var(--ink3);margin-top:4px">⭐ ${p.rating} (${p.reviews})</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        async function searchProducts(){
-            const q=document.getElementById('searchInput').value;
-            if(!q)return;
-            // Filter locally for now
-            S.products=S.products.filter(p=>p.name.toLowerCase().includes(q.toLowerCase()));
-            renderProducts();
-        }
-        
-        function handleSearch(e){if(e.key==='Enter')searchProducts();}
-        
-        /* ================= Cart ================= */
-        async function addToCart(productId){
+
+        /* ── Claim discount (main CTA) ── */
+        function claimDiscount() {
             haptic('success');
-            const d=await api('/api/cart/add',{method:'POST',body:{productId}});
-            if(d.ok){toast('Added to cart','success');updateCartBadge();}
-            else toast(d.error||'Failed to add','err');
-        }
-        
-        async function loadCart(){
-            const d=await api('/api/cart');
-            const container=document.getElementById('cartItems');
-            const summary=document.getElementById('cartSummary');
-            
-            if(d.ok&&d.items.length){
-                S.cart=d.items;
-                container.innerHTML=d.items.map(item=>`
-                    <div class="card flex justify-between items-center">
-                        <div>
-                            <div class="font-bold">${item.name}</div>
-                            <div class="text-sm text-pink">₹${item.price} × ${item.qty}</div>
-                        </div>
-                        <button onclick="removeFromCart('${item.productId}')" style="color:var(--berry)">✕</button>
-                    </div>
-                `).join('');
-                summary.style.display='block';
-                document.getElementById('cartTotal').textContent='₹'+d.total;
-            }else{
-                container.innerHTML='<div class="empty-state"><div class="empty-icon">🛒</div><div class="empty-title">Cart is empty</div><div class="empty-desc">Add some products from shop!</div></div>';
-                summary.style.display='none';
-            }
-            updateCartBadge(d.count||0);
-        }
-        
-        async function removeFromCart(productId){
-            const d=await api('/api/cart/remove',{method:'POST',body:{productId}});
-            if(d.ok){loadCart();toast('Removed from cart');}
-        }
-        
-        function updateCartBadge(n){
-            const b=document.getElementById('cartBadge');
-            if(n>0){b.textContent=n;b.classList.remove('hidden');}
-            else b.classList.add('hidden');
-        }
-        
-        async function checkout(){
-            const d=await api('/api/orders/create',{method:'POST',body:{}});
-            if(d.ok){
-                toast('Order placed successfully!','success');
-                switchTab('orders');
-            }else toast(d.error||'Failed to place order','err');
-        }
-        
-        /* ================= Orders ================= */
-        async function loadOrders(){
-            const d=await api('/api/orders');
-            const container=document.getElementById('ordersList');
-            
-            if(d.ok&&d.orders.length){
-                S.orders=d.orders;
-                container.innerHTML=d.orders.map(o=>`
-                    <div class="card">
-                        <div class="flex justify-between mb-1">
-                            <span class="font-bold">${o.id}</span>
-                            <span class="text-xs" style="background:var(--mint-bg);color:var(--mint);padding:4px 8px;border-radius:4px">${o.status}</span>
-                        </div>
-                        <div class="text-sm text-pink">Total: ₹${o.total}</div>
-                        <div class="text-xs" style="color:var(--ink3);margin-top:4px">${new Date(o.createdAt).toLocaleString()}</div>
-                    </div>
-                `).join('');
-            }else{
-                container.innerHTML='<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">No orders yet</div></div>';
-            }
-        }
-        
-        /* ================= Address ================= */
-        async function loadAddresses(){
-            const d=await api('/api/addresses');
-            const container=document.getElementById('addressList');
-            
-            if(d.ok&&d.addresses.length){
-                S.addresses=d.addresses;
-                container.innerHTML=d.addresses.map(a=>`
-                    <div class="card">
-                        <div class="font-bold">${a.name}</div>
-                        <div class="text-sm mt-1">${a.fullAddress}</div>
-                        <div class="text-xs" style="color:var(--ink3)">Pincode: ${a.pincode}</div>
-                    </div>
-                `).join('');
-            }else{
-                container.innerHTML='<div class="empty-state"><div class="empty-icon">📍</div><div class="empty-title">No addresses saved</div></div>';
-            }
-        }
-        
-        function showAddAddressModal(){toast('Address modal - implement as needed');}
-        
-        /* ================= Auth Actions ================= */
-        function showSignupModal(){document.getElementById('signupModal').classList.add('show')}
-        function showBuyAccountModal(){
-            if(tg && tg.openTelegramLink){
-                tg.openTelegramLink('https://t.me/tgekaiva');
+            confetti();
+
+            // Track click on backend
+            fetch('/api/track-click', { method: 'POST' }).catch(() => {});
+
+            // Open referral link
+            if (tg?.openLink) {
+                tg.openLink(REFERRAL_URL);
             } else {
-                window.open('https://t.me/tgekaiva', '_blank');
+                window.open(REFERRAL_URL, '_blank');
             }
-            toast('Opening Telegram to contact @tgekaiva...','info');
+
+            toast('Opening Meesho… Sign up & enjoy 40% OFF! 🎉', 'success');
         }
-        function showBulkImportModal(){
-            if(tg && tg.openTelegramLink){
-                tg.openTelegramLink('https://t.me/tgekaiva');
-            } else {
-                window.open('https://t.me/tgekaiva', '_blank');
-            }
-            toast('Contact @tgekaiva for bulk accounts','info');
-        }
-        function closeModal(id){document.getElementById(id).classList.remove('show')}
-        
-        async function signup(){
-            const mobile=document.getElementById('signupMobile').value.trim();
-            const name=document.getElementById('signupName').value.trim();
-            
-            if(mobile.length!==10){toast('Enter valid mobile','err');return;}
-            
-            haptic('success');
-            const d=await api('/api/auth/signup',{method:'POST',body:{mobile,name}});
-            
-            if(d.ok){
-                currentToken=d.token;
-                currentUser=d.account;
-                updateUI();
-                closeModal('signupModal');
-                toast('Welcome! ₹'+d.account.wallet.balance+' added to wallet','success');
-            }else{
-                toast(d.error||'Signup failed','err');
-            }
-        }
-        
-        async function loginWithCookies(){
-            const cookies=document.getElementById('cookieInput').value.trim();
-            if(!cookies){toast('Paste cookies first','err');return;}
-            
-            haptic('success');
-            const d=await api('/api/auth/cookie-login',{method:'POST',body:{cookies}});
-            
-            if(d.ok){
-                currentToken=d.token;
-                currentUser=d.account;
-                updateUI();
-                toast('Login successful!','success');
-            }else{
-                toast(d.error||'Login failed','err');
-            }
-        }
-        
-        /* ================= UI Updates ================= */
-        function updateUI(){
-            if(currentUser){
-                document.getElementById('accountLabel').textContent='👤 '+currentUser.name||currentUser.mobile;
-                document.getElementById('walletBalance').textContent=currentUser.wallet?.balance||0;
-            }
-        }
-        
-        /* ================= Init ================= */
-        async function init(){
-            // Load bootstrap data
-            const d=await api('/api/bootstrap');
-            if(d.ok&&d.user){
-                currentUser=d.user;
-                updateUI();
-            }
-            if(d.ok)document.getElementById('walletBalance').textContent=d.wallet?.balance||0;
-            if(d.ok)updateCartBadge(d.cartCount||0);
-        }
-        
-        // Start app
-        init();
+
+        /* ── Init: personalize greeting if in Telegram ── */
+        (function init() {
+            try {
+                const user = tg?.initDataUnsafe?.user;
+                if (user?.first_name) {
+                    document.querySelector('.hero-sub').innerHTML =
+                        `Hey <strong>${user.first_name}</strong>! Save up to <strong>₹100</strong> on your first Meesho order!`;
+                }
+            } catch(e) {}
+        })();
     </script>
 </body>
 </html>
